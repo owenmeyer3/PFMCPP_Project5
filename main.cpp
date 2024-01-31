@@ -356,7 +356,7 @@ struct Iphone
     void browseTheWeb(std::string url);
     void playMusic(std::string songName);
     void makePhoneCall(int number);
-    void screenShrinker(int magnitude);
+    void shrinkScreen(int magnitude);
 };
 
 Iphone::Iphone():
@@ -385,7 +385,7 @@ void Iphone::makePhoneCall(int number)
     number += 1;
 }
 
-void Iphone::screenShrinker(int magnitude)
+void Iphone::shrinkScreen(int magnitude)
 {
     int i = magnitude % 10;
     while(i < 10)
@@ -440,10 +440,10 @@ std::string WishList::setMood(float lightLevel)
 new UDT 5:
 with 2 member functions
 */
-struct SearchEngine
+struct SearchHistory
 {
-    SearchEngine();
-    ~SearchEngine();
+    SearchHistory();
+    ~SearchHistory();
 
     Cabin myCabin;
     Cabin::FlightAttendant jerry;
@@ -455,24 +455,24 @@ struct SearchEngine
     std::string prepEggs(int tableNumber);
 };
 
-SearchEngine::SearchEngine()
+SearchHistory::SearchHistory()
 {
     prepEggs(1);
     std::cout << "Construct SearchEngine. Who doesn't like eggs in the morning?" << std::endl;
 }
 
-SearchEngine::~SearchEngine()
+SearchHistory::~SearchHistory()
 {
     std::cout << "Deconstruct WishList" << std::endl;
 }
 
-void SearchEngine::animateFlightAttendant(float insanityLevel)
+void SearchHistory::animateFlightAttendant(float insanityLevel)
 {
     jerry.dance(insanityLevel);
     jerry.bendKnee();
 }
 
-std::string SearchEngine::prepEggs(int tableNumber)
+std::string SearchHistory::prepEggs(int tableNumber)
 {
     myDiner.cookEggs(myKitchen);
     myDiner.serveFood(tableNumber);
@@ -539,7 +539,7 @@ int main()
     passengersClub.playMusic();
     std::cout << "Legroom: " << std::to_string(legroom) << std::endl;
 
-    myPhone.screenShrinker(15);
+    myPhone.shrinkScreen(15);
 
     auto temp = jerrysKitchen.addBodyHeat();
     std::cout << "New temp: " << std::to_string(temp) << std::endl;
@@ -553,13 +553,13 @@ int main()
     std::cout << "This far back: " << std::to_string(angle) << std::endl;
 
     WishList wishlist;
-    SearchEngine searchEngine;
+    SearchHistory searchHistory;
 
     wishlist.playOnPhone();
     wishlist.setMood(50.0f);
 
-    searchEngine.animateFlightAttendant(40.0f);
-    searchEngine.prepEggs(5);
+    searchHistory.animateFlightAttendant(40.0f);
+    searchHistory.prepEggs(5);
     
     std::cout << "good to go!" << std::endl;
 }
