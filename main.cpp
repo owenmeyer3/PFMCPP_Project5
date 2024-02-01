@@ -106,12 +106,14 @@ struct Diner
         void burnToast(int numberOfSlices);
         std::string receiveOrder();
         float addBodyHeat();
+        void printGrillBrand();
     };
 
     void cookEggs(Kitchen thiskitchen);
     void serveFood(int tableNumber);
     std::string takeOrders(); 
     void loseRating(int numberOfSpills);
+    void printFoodSupplier();
 
     Kitchen kitchen;
 };
@@ -163,7 +165,8 @@ std::string Diner::Kitchen::receiveOrder(){
     return "Roger that!";
 }
 
-float Diner::Kitchen::addBodyHeat(){
+float Diner::Kitchen::addBodyHeat()
+{
 
     float changedTemperature = temperature;
 
@@ -175,6 +178,11 @@ float Diner::Kitchen::addBodyHeat(){
     std::cout << "It's " << changedTemperature << " degrees in here!" << std::endl;
 
     return changedTemperature;
+}
+
+void Diner::Kitchen::printGrillBrand()
+{
+    std::cout << "Kitchen grillBrand: " << this->grillBrand << std::endl;
 }
 
 void Diner::cookEggs(Kitchen thiskitchen)
@@ -200,6 +208,12 @@ void Diner::loseRating(int numberOfSpills)
         starRating -= 1;
     }
 }
+
+void Diner::printFoodSupplier()
+{
+    std::cout << "Diner foodSupplier: " << this->foodSupplier << std::endl;
+}
+
 /*
 copied UDT 2:
 */
@@ -230,12 +244,15 @@ struct Cabin
         float bendKnee();
         void speak();
         float pourCoffee(float coffeeLevel, int numberOfOrders);
+        void printDeoderantBrand();
+        void printEarSize();
     };
 
     void dimLights(float newLevel);
     float serveCoffee(FlightAttendant flightAttendant);
     void playMusic();
     float reclineSeat(float maxReclineAngle, bool rearPassengerIsHappy);
+    void printGingerAletype();
 
     FlightAttendant joseph;
     FlightAttendant nadine;
@@ -300,6 +317,16 @@ float Cabin::FlightAttendant::pourCoffee(float coffeeLevel, int numberOfOrders)
     return coffeeLevel;
 }
 
+void Cabin::FlightAttendant::printDeoderantBrand()
+{
+    std::cout << "FlightAttendant deoderantBrand: " << this->deoderantBrand << std::endl;
+}
+
+void Cabin::FlightAttendant::printEarSize()
+{
+    std::cout << "FlightAttendant earSize: " << std::to_string(this->earSize) << std::endl;
+}
+
 void Cabin::dimLights(float newLevel)
 {
     newLevel += legroomDepth;
@@ -345,6 +372,12 @@ float Cabin::reclineSeat(float maxReclineAngle, bool rearPassengerIsHappy)
     }
     return angle;
 }
+
+void Cabin::printGingerAletype()
+{
+    std::cout << "Cabin gingerAletype: " << this->gingerAletype << std::endl;
+}
+
 /*
 copied UDT 3:
 */
@@ -362,6 +395,8 @@ struct Iphone
     void playMusic(std::string songName);
     void makePhoneCall(int number);
     void shrinkScreen(int magnitude);
+    void printBatteryLife();
+    void printCameraType();
 };
 
 Iphone::Iphone():
@@ -399,6 +434,17 @@ void Iphone::shrinkScreen(int magnitude)
         ++i;
     }
 }
+
+void Iphone::printBatteryLife()
+{
+    std::cout << "iPhone batteryLife: " << std::to_string(this->batteryLife) << std::endl;
+}
+
+void Iphone::printCameraType()
+{
+    std::cout << "iPhone cameraType: " << this->cameraType << std::endl;
+}
+
 /*
 new UDT 4:
 with 2 member functions
@@ -565,6 +611,22 @@ int main()
 
     searchHistory.animateFlightAttendant(40.0f);
     searchHistory.prepEggs(5);
+
+    std::cout << "iPhone batteryLife: " << std::to_string(myPhone.batteryLife) << std::endl;
+    std::cout << "iPhone cameraType: " << davesPhone.cameraType << std::endl;
+    std::cout << "Kitchen grillBrand: " << jerrysKitchen.grillBrand << std::endl;
+    std::cout << "Diner foodSupplier: " << jerrys.foodSupplier << std::endl;
+    std::cout << "FlightAttendant deoderantBrand: " << jerry.deoderantBrand << std::endl;
+    std::cout << "FlightAttendant earSize: " << std::to_string(jessica.earSize) << std::endl;
+    std::cout << "Cabin gingerAletype: " << passengersClub.gingerAletype << std::endl;
+
+    myPhone.printBatteryLife();
+    davesPhone.printCameraType();
+    jerrysKitchen.printGrillBrand();
+    jerrys.printFoodSupplier();
+    jerry.printDeoderantBrand();
+    jessica.printEarSize();
+    passengersClub.printGingerAletype();
     
     std::cout << "good to go!" << std::endl;
 }
