@@ -6,48 +6,46 @@ Create a branch named Part3
 
  the 'new' keyword
 
- 1) add #include "LeakedObjectDetector.h" to main
+ 1) add #include "LeakedObjectDetector.h" to main X
  
- 2) Add 'JUCE_LEAK_DETECTOR(OwnerClass)' at the end of your UDTs.
+ 2) Add 'JUCE_LEAK_DETECTOR(OwnerClass)' at the end of your UDTs. X
  
- 3) write the name of your class where it says "OwnerClass"
+ 3) write the name of your class where it says "OwnerClass" X
  
- 4) write wrapper classes for each type similar to how it was shown in the video
+ 4) write wrapper classes for each type similar to how it was shown in the video X
  
- 5) update main() 
-      replace your objects with your wrapper classes, which have your UDTs as pointer member variables.
+ 5) update main() replace your objects with your wrapper classes, which have your UDTs as pointer member variables. X
       
-    This means if you had something like the following in your main() previously: 
+This means if you had something like the following in your main() previously: X
 */
 #if false
- Axe axe;
- std::cout << "axe sharpness: " << axe.sharpness << "\n";
- #endif
- /*
-    you would update that to use your wrappers:
-    
- */
+Axe axe;
+std::cout << "axe sharpness: " << axe.sharpness << "\n";
+#endif
 
+ /*
+ you would update that to use your wrappers:   
+ */
 #if false
 AxeWrapper axWrapper( new Axe() );
 std::cout << "axe sharpness: " << axWrapper.axPtr->sharpness << "\n";
 #endif
 /*
 notice that the object name has changed from 'axe' to 'axWrapper'
-You don't have to do this, you can keep your current object name and just change its type to your Wrapper class
+You don't have to do this, you can keep your current object name and just change its type to your Wrapper class X
 
-6) If you have a class that has a nested class in it, and an instantiation of that nested class as a member variable, 
+6) If you have a class that has a nested class in it, and an instantiation of that nested class as a member variable,
     - you do not need to write a Wrapper for that nested class
     - you do not need to replace that nested instance with a wrapped instance.
-    If you want an explanation, message me in Slack
+    If you want an explanation, message me in Slack X
 
-7) If you were using any UDTs as function arguments like this:
+7) If you were using any UDTs as function arguments like this: X
 */
 #if false
 void someMemberFunction(Axe axe);
 #endif
 /*
-  Pass those arguments by Reference now that you know what references are (Project 6 Part 2).
+  Pass those arguments by Reference now that you know what references are (Project 6 Part 2). X
 */
 #if false
 void someMemberFunction(Axe& axe);
@@ -56,15 +54,15 @@ void someMemberFunction(Axe& axe);
 If you aren't modifying the passed-in object inside the function, pass by 'const reference'.
 Marking a function parameter as 'const' means that you are promising that the parameter will not be modified.
 Additionally, you can mark class member functions as 'const'
-If you do this, you are promising that the member function will not modify any member variables.
+If you do this, you are promising that the member function will not modify any member variables. X
 
-Mark every member function that is not modifying any member variables as 'const'
+Mark every member function that is not modifying any member variables as 'const' X
 */
 #if false
-//a function where the argument is passed by const-ref
+//a function where the argument is passed by const-ref X
 void someMemberFunction(const Axe& axe);
 
-//a member function that is marked const, meaning it will not modify any member variables of the 'Axe' class.
+//a member function that is marked const, meaning it will not modify any member variables of the 'Axe' class. X
 void Axe::aConstMemberFunction() const { }
 #endif
 /*
@@ -80,6 +78,7 @@ void Axe::aConstMemberFunction() const { }
 
 
 #include <iostream>
+#include "LeakedObjectDetector.h"
 /*
 copied UDT 1:
 */
@@ -108,18 +107,22 @@ struct Diner
 
         void runFoodDisposal();
         void burnToast(int numberOfSlices);
-        std::string receiveOrder();
-        float addBodyHeat();
-        void printGrillBrand();
+        std::string receiveOrder() const;
+        float addBodyHeat() const;
+        void printGrillBrand() const;
+
+    JUCE_LEAK_DETECTOR(Kitchen)
     };
 
-    void cookEggs(Kitchen thiskitchen);
-    void serveFood(int tableNumber);
-    std::string takeOrders(); 
+    void cookEggs(const Kitchen& thiskitchen);
+    void serveFood(int tableNumber) const;
+    std::string takeOrders() const; 
     void loseRating(int numberOfSpills);
-    void printFoodSupplier();
+    void printFoodSupplier() const;
 
     Kitchen kitchen;
+
+    JUCE_LEAK_DETECTOR(Diner)
 };
 
 Diner::Diner():
@@ -165,11 +168,12 @@ void Diner::Kitchen::burnToast(int numberOfSlices)
     }
 }
 
-std::string Diner::Kitchen::receiveOrder(){
+std::string Diner::Kitchen::receiveOrder() const
+{
     return "Roger that!";
 }
 
-float Diner::Kitchen::addBodyHeat()
+float Diner::Kitchen::addBodyHeat() const
 {
 
     float changedTemperature = temperature;
@@ -184,23 +188,23 @@ float Diner::Kitchen::addBodyHeat()
     return changedTemperature;
 }
 
-void Diner::Kitchen::printGrillBrand()
+void Diner::Kitchen::printGrillBrand() const
 {
     std::cout << "Kitchen grillBrand: " << this->grillBrand << std::endl;
 }
 
-void Diner::cookEggs(Kitchen thiskitchen)
+void Diner::cookEggs(const Kitchen& thiskitchen)
 {
     numberOfTables = numberOfEmployees + thiskitchen.numberOfChefs;
     std::cout << "You've got crumbs all over my " << kitchen.tileType << std::endl;
 }
 
-void Diner::serveFood(int tableNumber)
+void Diner::serveFood(int tableNumber) const
 {
     tableNumber += 1;
 }
 
-std::string Diner::takeOrders()
+std::string Diner::takeOrders() const
 {
     return hoursOfOperation + " " + foodSupplier;
 }
@@ -213,10 +217,20 @@ void Diner::loseRating(int numberOfSpills)
     }
 }
 
-void Diner::printFoodSupplier()
+void Diner::printFoodSupplier() const
 {
     std::cout << "Diner foodSupplier: " << this->foodSupplier << std::endl;
 }
+
+struct DinerWrapper
+{
+    DinerWrapper(Diner* _dinerPtr) : dinerPtr(_dinerPtr) {}
+    ~DinerWrapper()
+    {
+        delete dinerPtr;
+    }
+    Diner* dinerPtr = nullptr;
+};
 
 /*
 copied UDT 2:
@@ -244,22 +258,26 @@ struct Cabin
         std::string favoriteDanceType = "Disco";
         float earSize = 0.0f;
 
-        void dance(float insanityLevel);
+        void dance(float insanityLevel) const;
         float bendKnee();
-        void speak();
-        float pourCoffee(float coffeeLevel, int numberOfOrders);
-        void printDeoderantBrand();
-        void printEarSize();
+        void speak() const;
+        float pourCoffee(float coffeeLevel, int numberOfOrders) const;
+        void printDeoderantBrand() const;
+        void printEarSize() const;
+
+        JUCE_LEAK_DETECTOR(FlightAttendant)
     };
 
-    void dimLights(float newLevel);
-    float serveCoffee(FlightAttendant flightAttendant);
+    void dimLights(float newLevel) const;
+    float serveCoffee(FlightAttendant& flightAttendant) const;
     void playMusic();
-    float reclineSeat(float maxReclineAngle, bool rearPassengerIsHappy);
-    void printGingerAletype();
+    float reclineSeat(float maxReclineAngle, bool rearPassengerIsHappy) const;
+    void printGingerAletype() const;
 
     FlightAttendant joseph;
     FlightAttendant nadine;
+
+    JUCE_LEAK_DETECTOR(Cabin)
 };
 
 Cabin::Cabin():
@@ -286,7 +304,7 @@ Cabin::FlightAttendant::~FlightAttendant()
     std::cout << "Destruct Cabin::FlightAttendant" << std::endl;
 }
 
-void Cabin::FlightAttendant::dance(float insanityLevel)
+void Cabin::FlightAttendant::dance(float insanityLevel) const
 {
     std::cout << "I had like " << insanityLevel << " cups of coffee before this" << std::endl;
 }
@@ -297,13 +315,13 @@ float Cabin::FlightAttendant::bendKnee()
     return earSize;
 }
 
-void Cabin::FlightAttendant::speak()
+void Cabin::FlightAttendant::speak() const
 {
     std::cout << "About what?" << std::endl;
     std::cout << deoderantBrand << " " << favoriteDanceType << std::endl;
 }
 
-float Cabin::FlightAttendant::pourCoffee(float coffeeLevel, int numberOfOrders)
+float Cabin::FlightAttendant::pourCoffee(float coffeeLevel, int numberOfOrders) const
 {
     for(int order = 0; order < numberOfOrders; ++order)
     {
@@ -321,23 +339,23 @@ float Cabin::FlightAttendant::pourCoffee(float coffeeLevel, int numberOfOrders)
     return coffeeLevel;
 }
 
-void Cabin::FlightAttendant::printDeoderantBrand()
+void Cabin::FlightAttendant::printDeoderantBrand() const
 {
     std::cout << "FlightAttendant deoderantBrand: " << this->deoderantBrand << std::endl;
 }
 
-void Cabin::FlightAttendant::printEarSize()
+void Cabin::FlightAttendant::printEarSize() const
 {
     std::cout << "FlightAttendant earSize: " << std::to_string(this->earSize) << std::endl;
 }
 
-void Cabin::dimLights(float newLevel)
+void Cabin::dimLights(float newLevel) const
 {
     newLevel += legroomDepth;
     std::cout << snackType << " and " << gingerAletype << std::endl;
 }
 
-float Cabin::serveCoffee(FlightAttendant flightAttendant)
+float Cabin::serveCoffee(FlightAttendant& flightAttendant) const
 {
     flightAttendant.bendKnee();
     return legroomDepth;
@@ -352,7 +370,7 @@ void Cabin::playMusic()
     }
 }
 
-float Cabin::reclineSeat(float maxReclineAngle, bool rearPassengerIsHappy)
+float Cabin::reclineSeat(float maxReclineAngle, bool rearPassengerIsHappy) const
 {
     float angle = 0.0f;
 
@@ -377,10 +395,20 @@ float Cabin::reclineSeat(float maxReclineAngle, bool rearPassengerIsHappy)
     return angle;
 }
 
-void Cabin::printGingerAletype()
+void Cabin::printGingerAletype() const
 {
     std::cout << "Cabin gingerAletype: " << this->gingerAletype << std::endl;
 }
+
+struct CabinWrapper
+{
+    CabinWrapper(Cabin* _cabinPtr) : cabinPtr(_cabinPtr) {}
+    ~CabinWrapper()
+    {
+        delete cabinPtr;
+    }
+    Cabin* cabinPtr = nullptr;
+};
 
 /*
 copied UDT 3:
@@ -397,10 +425,12 @@ struct Iphone
 
     void browseTheWeb(std::string url);
     void playMusic(std::string songName);
-    void makePhoneCall(int number);
+    void makePhoneCall(int number) const;
     void shrinkScreen(int magnitude);
-    void printBatteryLife();
-    void printCameraType();
+    void printBatteryLife() const;
+    void printCameraType() const;
+
+    JUCE_LEAK_DETECTOR(Iphone)
 };
 
 Iphone::Iphone():
@@ -423,7 +453,7 @@ void Iphone::playMusic(std::string songName)
     std::cout << speakerType << " " << songName << std::endl;
 }
 
-void Iphone::makePhoneCall(int number)
+void Iphone::makePhoneCall(int number) const
 {
     std::cout << "Listen on on " << speakerType << " speakers" << std::endl;
     number += 1;
@@ -439,15 +469,25 @@ void Iphone::shrinkScreen(int magnitude)
     }
 }
 
-void Iphone::printBatteryLife()
+void Iphone::printBatteryLife() const
 {
     std::cout << "iPhone batteryLife: " << std::to_string(this->batteryLife) << std::endl;
 }
 
-void Iphone::printCameraType()
+void Iphone::printCameraType() const
 {
     std::cout << "iPhone cameraType: " << this->cameraType << std::endl;
 }
+
+struct IphoneWrapper
+{
+    IphoneWrapper(Iphone* _iphonePtr) : iphonePtr(_iphonePtr) {}
+    ~IphoneWrapper()
+    {
+        delete iphonePtr;
+    }
+    Iphone* iphonePtr = nullptr;
+};
 
 /*
 new UDT 4:
@@ -466,6 +506,8 @@ struct WishList
 
     void playOnPhone();
     std::string setMood(float lightLevel);
+
+    JUCE_LEAK_DETECTOR(WishList)
 };
 
 WishList::WishList()
@@ -491,6 +533,16 @@ std::string WishList::setMood(float lightLevel)
     return "Lights dimmed to " + std::to_string(lightLevel) + " and music playing";
 }
 
+struct WishListWrapper
+{
+    WishListWrapper(WishList* _wishlistPtr) : wishlistPtr(_wishlistPtr) {}
+    ~WishListWrapper()
+    {
+        delete wishlistPtr;
+    }
+    WishList* wishlistPtr = nullptr;
+};
+
 /*
 new UDT 5:
 with 2 member functions
@@ -508,6 +560,8 @@ struct SearchHistory
 
     void animateFlightAttendant(float insanityLevel);
     std::string prepEggs(int tableNumber);
+
+    JUCE_LEAK_DETECTOR(SearchHistory)
 };
 
 SearchHistory::SearchHistory()
@@ -536,6 +590,16 @@ std::string SearchHistory::prepEggs(int tableNumber)
     return "Here's our hours and food supplier " + hoursAndSupplier + ". We served to table " + std::to_string(tableNumber);
 }
 
+struct SearchHistoryWrapper
+{
+    SearchHistoryWrapper(SearchHistory* _searchHistoryPtr) : searchHistoryPtr(_searchHistoryPtr) {}
+    ~SearchHistoryWrapper()
+    {
+        delete searchHistoryPtr;
+    }
+    SearchHistory* searchHistoryPtr = nullptr;
+};
+
 
 /*
 MAKE SURE YOU ARE NOT ON THE MASTER BRANCH
@@ -553,30 +617,40 @@ Wait for my code review.
 
 int main()
 {
-    Iphone myPhone;
-    Iphone davesPhone;
-    Diner jerrys;
+    IphoneWrapper myPhoneWrapper( new Iphone() );
+    //Iphone myPhone;
+    
+    IphoneWrapper davesPhoneWrapper( new Iphone() );
+    //Iphone davesPhone;
+
+    DinerWrapper jerrysWrapper( new Diner() );
+    //Diner jerrys;
+
     Diner::Kitchen jerrysKitchen;
-    Cabin passengersClub;
+
+    CabinWrapper passengersClubWrapper( new Cabin() );
+    //Cabin passengersClub;
+
     Cabin::FlightAttendant jerry;
+
     Cabin::FlightAttendant jessica;
 
-    myPhone.browseTheWeb("homestarrunner.com");
-    myPhone.playMusic("Night Mommas");
-    myPhone.makePhoneCall(5551234);
+    myPhoneWrapper.iphonePtr->browseTheWeb("homestarrunner.com");
+    myPhoneWrapper.iphonePtr->playMusic("Night Mommas");
+    myPhoneWrapper.iphonePtr->makePhoneCall(5551234);
 
-    davesPhone.browseTheWeb("namethatbeard.com");
-    davesPhone.playMusic("Sharp Dressed Man");
-    davesPhone.makePhoneCall(5559876);
+    davesPhoneWrapper.iphonePtr->browseTheWeb("namethatbeard.com");
+    davesPhoneWrapper.iphonePtr->playMusic("Sharp Dressed Man");
+    davesPhoneWrapper.iphonePtr->makePhoneCall(5559876);
 
     jerrysKitchen.runFoodDisposal();
     jerrysKitchen.burnToast(1);
     auto kitchenOrder = jerrysKitchen.receiveOrder();
     std::cout << kitchenOrder << std::endl;
 
-    jerrys.serveFood(12);
-    jerrys.cookEggs(jerrysKitchen);
-    auto tableOrder = jerrys.takeOrders();
+    jerrysWrapper.dinerPtr->serveFood(12);
+    jerrysWrapper.dinerPtr->cookEggs(jerrysKitchen);
+    auto tableOrder = jerrysWrapper.dinerPtr->takeOrders();
     std::cout << "Here's your " << tableOrder << std::endl;
 
     jerry.dance(7.0f);
@@ -589,22 +663,22 @@ int main()
     jessica.speak();
     std::cout << "hear me, " << std::to_string(jessicasEar) << std::endl;
 
-    passengersClub.dimLights(11.0f);
-    auto legroom = passengersClub.serveCoffee(jessica);
-    passengersClub.playMusic();
+    passengersClubWrapper.cabinPtr->dimLights(11.0f);
+    auto legroom = passengersClubWrapper.cabinPtr->serveCoffee(jessica);
+    passengersClubWrapper.cabinPtr->playMusic();
     std::cout << "Legroom: " << std::to_string(legroom) << std::endl;
 
-    myPhone.shrinkScreen(15);
+    myPhoneWrapper.iphonePtr->shrinkScreen(15);
 
     auto temp = jerrysKitchen.addBodyHeat();
     std::cout << "New temp: " << std::to_string(temp) << std::endl;
 
-    jerrys.loseRating(5);
+    jerrysWrapper.dinerPtr->loseRating(5);
 
     auto coffeeLevel = jessica.pourCoffee(5.0f, 25);
     std::cout << "coffeeleft: " << std::to_string(coffeeLevel) << std::endl;
 
-    auto angle = passengersClub.reclineSeat(40.0f, true);
+    auto angle = passengersClubWrapper.cabinPtr->reclineSeat(40.0f, true);
     std::cout << "This far back: " << std::to_string(angle) << std::endl;
 
     WishList wishlist;
@@ -616,21 +690,21 @@ int main()
     searchHistory.animateFlightAttendant(40.0f);
     searchHistory.prepEggs(5);
 
-    std::cout << "iPhone batteryLife: " << std::to_string(myPhone.batteryLife) << std::endl;
-    std::cout << "iPhone cameraType: " << davesPhone.cameraType << std::endl;
+    std::cout << "iPhone batteryLife: " << std::to_string(myPhoneWrapper.iphonePtr->batteryLife) << std::endl;
+    std::cout << "iPhone cameraType: " << davesPhoneWrapper.iphonePtr->cameraType << std::endl;
     std::cout << "Kitchen grillBrand: " << jerrysKitchen.grillBrand << std::endl;
-    std::cout << "Diner foodSupplier: " << jerrys.foodSupplier << std::endl;
+    std::cout << "Diner foodSupplier: " << jerrysWrapper.dinerPtr->foodSupplier << std::endl;
     std::cout << "FlightAttendant deoderantBrand: " << jerry.deoderantBrand << std::endl;
     std::cout << "FlightAttendant earSize: " << std::to_string(jessica.earSize) << std::endl;
-    std::cout << "Cabin gingerAletype: " << passengersClub.gingerAletype << std::endl;
+    std::cout << "Cabin gingerAletype: " << passengersClubWrapper.cabinPtr->gingerAletype << std::endl;
 
-    myPhone.printBatteryLife();
-    davesPhone.printCameraType();
+    myPhoneWrapper.iphonePtr->printBatteryLife();
+    davesPhoneWrapper.iphonePtr->printCameraType();
     jerrysKitchen.printGrillBrand();
-    jerrys.printFoodSupplier();
+    jerrysWrapper.dinerPtr->printFoodSupplier();
     jerry.printDeoderantBrand();
     jessica.printEarSize();
-    passengersClub.printGingerAletype();
+    passengersClubWrapper.cabinPtr->printGingerAletype();
     
     std::cout << "good to go!" << std::endl;
 }
