@@ -635,23 +635,44 @@ int main()
 
     Cabin::FlightAttendant jessica;
 
-    myPhoneWrapper.iphonePtr->browseTheWeb("homestarrunner.com");
-    myPhoneWrapper.iphonePtr->playMusic("Night Mommas");
-    myPhoneWrapper.iphonePtr->makePhoneCall(5551234);
+    if(myPhoneWrapper.iphonePtr != nullptr)
+    {
+        myPhoneWrapper.iphonePtr->browseTheWeb("homestarrunner.com");
+        myPhoneWrapper.iphonePtr->playMusic("Night Mommas");
+        myPhoneWrapper.iphonePtr->makePhoneCall(5551234);
+    }
+    else
+    {
+        std::cout << "myPhoneWrapper.iphonePtr is nullptr" << std::endl;
+    }
 
-    davesPhoneWrapper.iphonePtr->browseTheWeb("namethatbeard.com");
-    davesPhoneWrapper.iphonePtr->playMusic("Sharp Dressed Man");
-    davesPhoneWrapper.iphonePtr->makePhoneCall(5559876);
+    if(davesPhoneWrapper.iphonePtr != nullptr)
+    {
+        davesPhoneWrapper.iphonePtr->browseTheWeb("namethatbeard.com");
+        davesPhoneWrapper.iphonePtr->playMusic("Sharp Dressed Man");
+        davesPhoneWrapper.iphonePtr->makePhoneCall(5559876);
+    }
+    else
+    {
+        std::cout << "davesPhoneWrapper.iphonePtr is nullptr" << std::endl;
+    }
 
     jerrysKitchen.runFoodDisposal();
     jerrysKitchen.burnToast(1);
     auto kitchenOrder = jerrysKitchen.receiveOrder();
     std::cout << kitchenOrder << std::endl;
 
-    jerrysWrapper.dinerPtr->serveFood(12);
-    jerrysWrapper.dinerPtr->cookEggs(jerrysKitchen);
-    auto tableOrder = jerrysWrapper.dinerPtr->takeOrders();
-    std::cout << "Here's your " << tableOrder << std::endl;
+    if(jerrysWrapper.dinerPtr != nullptr)
+    {
+        jerrysWrapper.dinerPtr->serveFood(12);
+        jerrysWrapper.dinerPtr->cookEggs(jerrysKitchen);
+        auto tableOrder = jerrysWrapper.dinerPtr->takeOrders();
+        std::cout << "Here's your " << tableOrder << std::endl;
+    }
+    else
+    {
+        std::cout << "jerrysWrapper.dinerPtr is nullptr" << std::endl;
+    }
 
     jerry.dance(7.0f);
     auto jerrysEar = jerry.bendKnee();
@@ -663,23 +684,52 @@ int main()
     jessica.speak();
     std::cout << "hear me, " << std::to_string(jessicasEar) << std::endl;
 
-    passengersClubWrapper.cabinPtr->dimLights(11.0f);
-    auto legroom = passengersClubWrapper.cabinPtr->serveCoffee(jessica);
-    passengersClubWrapper.cabinPtr->playMusic();
-    std::cout << "Legroom: " << std::to_string(legroom) << std::endl;
+    if(passengersClubWrapper.cabinPtr != nullptr)
+    {
+        passengersClubWrapper.cabinPtr->dimLights(11.0f);
+        auto legroom = passengersClubWrapper.cabinPtr->serveCoffee(jessica);
+        passengersClubWrapper.cabinPtr->playMusic();
+        std::cout << "Legroom: " << std::to_string(legroom) << std::endl;
+    }
+    else
+    {
+        std::cout << "passengersClubWrapper.cabinPtr is nullptr" << std::endl;
+    }
 
-    myPhoneWrapper.iphonePtr->shrinkScreen(15);
+    if(myPhoneWrapper.iphonePtr != nullptr)
+    {
+        myPhoneWrapper.iphonePtr->shrinkScreen(15);
+    }
+    else
+    {
+        std::cout << "myPhoneWrapper.iphonePtr is nullptr" << std::endl;
+    }
 
     auto temp = jerrysKitchen.addBodyHeat();
     std::cout << "New temp: " << std::to_string(temp) << std::endl;
 
-    jerrysWrapper.dinerPtr->loseRating(5);
+    if(jerrysWrapper.dinerPtr != nullptr)
+    {
+        jerrysWrapper.dinerPtr->loseRating(5);
+    }
+    else
+    {
+        std::cout << "jerrysWrapper.dinerPtr is nullptr" << std::endl;
+    }
 
     auto coffeeLevel = jessica.pourCoffee(5.0f, 25);
     std::cout << "coffeeleft: " << std::to_string(coffeeLevel) << std::endl;
 
-    auto angle = passengersClubWrapper.cabinPtr->reclineSeat(40.0f, true);
-    std::cout << "This far back: " << std::to_string(angle) << std::endl;
+    if(passengersClubWrapper.cabinPtr != nullptr)
+    {
+        auto angle = passengersClubWrapper.cabinPtr->reclineSeat(40.0f, true);
+        std::cout << "This far back: " << std::to_string(angle) << std::endl;
+    }
+    else
+    {
+        std::cout << "passengersClubWrapper.cabinPtr is nullptr" << std::endl;
+    }
+
 
     WishList wishlist;
     SearchHistory searchHistory;
@@ -690,21 +740,89 @@ int main()
     searchHistory.animateFlightAttendant(40.0f);
     searchHistory.prepEggs(5);
 
-    std::cout << "iPhone batteryLife: " << std::to_string(myPhoneWrapper.iphonePtr->batteryLife) << std::endl;
-    std::cout << "iPhone cameraType: " << davesPhoneWrapper.iphonePtr->cameraType << std::endl;
-    std::cout << "Kitchen grillBrand: " << jerrysKitchen.grillBrand << std::endl;
-    std::cout << "Diner foodSupplier: " << jerrysWrapper.dinerPtr->foodSupplier << std::endl;
-    std::cout << "FlightAttendant deoderantBrand: " << jerry.deoderantBrand << std::endl;
-    std::cout << "FlightAttendant earSize: " << std::to_string(jessica.earSize) << std::endl;
-    std::cout << "Cabin gingerAletype: " << passengersClubWrapper.cabinPtr->gingerAletype << std::endl;
 
-    myPhoneWrapper.iphonePtr->printBatteryLife();
-    davesPhoneWrapper.iphonePtr->printCameraType();
+    if(myPhoneWrapper.iphonePtr != nullptr)
+    {
+        std::cout << "iPhone batteryLife: " << std::to_string(myPhoneWrapper.iphonePtr->batteryLife) << std::endl;
+    }
+    else
+    {
+        std::cout << "myPhoneWrapper.iphonePtr is nullptr" << std::endl;
+    }
+
+    if(davesPhoneWrapper.iphonePtr != nullptr)
+    {
+        std::cout << "iPhone cameraType: " << davesPhoneWrapper.iphonePtr->cameraType << std::endl;
+    }
+    else
+    {
+        std::cout << "davesPhoneWrapper.iphonePtr is nullptr" << std::endl;
+    }
+
+    std::cout << "Kitchen grillBrand: " << jerrysKitchen.grillBrand << std::endl;
+
+    if(jerrysWrapper.dinerPtr != nullptr)
+    {
+        std::cout << "Diner foodSupplier: " << jerrysWrapper.dinerPtr->foodSupplier << std::endl;
+    }
+    else
+    {
+        std::cout << "jerrysWrapper.dinerPtr is nullptr" << std::endl;
+    }
+
+    std::cout << "FlightAttendant deoderantBrand: " << jerry.deoderantBrand << std::endl;
+
+    std::cout << "FlightAttendant earSize: " << std::to_string(jessica.earSize) << std::endl;
+
+    if(passengersClubWrapper.cabinPtr != nullptr)
+    {
+        std::cout << "Cabin gingerAletype: " << passengersClubWrapper.cabinPtr->gingerAletype << std::endl;
+    }
+    else
+    {
+        std::cout << "passengersClubWrapper.cabinPtr is nullptr" << std::endl;
+    }
+    
+    if(myPhoneWrapper.iphonePtr != nullptr)
+    {
+        myPhoneWrapper.iphonePtr->printBatteryLife();
+    }
+    else
+    {
+        std::cout << "myPhoneWrapper.iphonePtr is nullptr" << std::endl;
+    }
+
+    if(davesPhoneWrapper.iphonePtr != nullptr)
+    {
+        davesPhoneWrapper.iphonePtr->printCameraType();
+    }
+    else
+    {
+        std::cout << "davesPhoneWrapper.iphonePtr is nullptr" << std::endl;    
+    }
+    
     jerrysKitchen.printGrillBrand();
-    jerrysWrapper.dinerPtr->printFoodSupplier();
+
+    if(jerrysWrapper.dinerPtr != nullptr)
+    {
+        jerrysWrapper.dinerPtr->printFoodSupplier();
+    }
+    else
+    {
+        std::cout << "jerrysWrapper.dinerPtr is nullptr" << std::endl;
+    }
+    
     jerry.printDeoderantBrand();
     jessica.printEarSize();
-    passengersClubWrapper.cabinPtr->printGingerAletype();
+
+    if(passengersClubWrapper.cabinPtr != nullptr)
+    {
+        passengersClubWrapper.cabinPtr->printGingerAletype();
+    }
+    else
+    {
+        std::cout << "passengersClubWrapper.cabinPtr is nullptr" << std::endl;
+    }
     
     std::cout << "good to go!" << std::endl;
 }
